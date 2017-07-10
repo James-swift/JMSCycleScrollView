@@ -1,0 +1,15 @@
+PODS:
+  - JMSPageControl (1.0.0)
+  - Kingfisher (3.10.2)
+
+DEPENDENCIES:
+  - JMSPageControl
+  - Kingfisher
+
+SPEC CHECKSUMS:
+  JMSPageControl: e6804cc233e15da13d716a7264d3e60fc494cbbf
+  Kingfisher: 7297492bf8cec9b2e2dee3519f2219948580d98e
+
+PODFILE CHECKSUM: a1556d65bff29f0d4d810e07a3369834c832377d
+
+COCOAPODS: 1.2.1

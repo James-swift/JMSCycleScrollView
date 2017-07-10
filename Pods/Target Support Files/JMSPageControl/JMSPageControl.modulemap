@@ -1,0 +1,6 @@
+framework module JMSPageControl {
+  umbrella header "JMSPageControl-umbrella.h"
+
+  export *
+  module * { export * }
+}

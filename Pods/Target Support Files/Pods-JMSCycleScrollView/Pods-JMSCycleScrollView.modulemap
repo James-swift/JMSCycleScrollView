@@ -1,0 +1,6 @@
+framework module Pods_JMSCycleScrollView {
+  umbrella header "Pods-JMSCycleScrollView-umbrella.h"
+
+  export *
+  module * { export * }
+}
