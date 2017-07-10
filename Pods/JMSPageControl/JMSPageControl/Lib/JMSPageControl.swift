@@ -189,7 +189,6 @@ public class JMSPageControl: UIControl {
     }
     
     private func updateDotFrame(_ dotView: UIView, _ index: Int) {
-        print("触：" + String.init(format: "%.2f", self.frame.width) + "  " + String.init(format: "%.2f", self.sizeForNumberOfPages(self.numberOfPages).width))
         let x = (self.dotSize.width + self.spacingBetweenDots) * CGFloat(index) + ((self.frame.width - self.sizeForNumberOfPages(self.numberOfPages).width) / 2)
         let y = (self.frame.height - self.dotSize.height) / 2
         
