@@ -119,7 +119,7 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
     /// 图片滚动方向，默认为水平滚动
     public var scrollDirection: UICollectionViewScrollDirection = .horizontal {
         didSet {
-            self.flowLayout.scrollDirection = scrollDirection
+            self.flowLayout?.scrollDirection = scrollDirection
             
             if self.scrollDirection == .horizontal {
                 self.scrollPositon = .centeredHorizontally
@@ -257,16 +257,10 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
     /// 监听滚动
     public var itemDidScrollBlk: ((_ currentIndex: Int)->())?
     
-    private(set) lazy var flowLayout: UICollectionViewFlowLayout = {
-        let temp = UICollectionViewFlowLayout()
-        temp.minimumLineSpacing = 0
-        temp.scrollDirection = .horizontal
-        
-        return temp
-    }()
+    public var flowLayout: UICollectionViewFlowLayout?
     
-    private(set) lazy var mainView: UICollectionView = {
-        let temp = UICollectionView.init(frame: self.bounds, collectionViewLayout: self.flowLayout)
+    public lazy var mainView: UICollectionView = {
+        let temp = UICollectionView.init(frame: self.bounds, collectionViewLayout: self.flowLayout!)
         temp.backgroundColor = .clear
         temp.isPagingEnabled = true
         temp.showsHorizontalScrollIndicator = false
@@ -314,10 +308,13 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
             }
             
             var index: Int = 0
-            if self.flowLayout.scrollDirection == .horizontal {
-                index = Int((self.mainView.contentOffset.x + self.flowLayout.itemSize.width * 0.5) / self.flowLayout.itemSize.width)
-            }else {
-                index = Int((self.mainView.contentOffset.y + self.flowLayout.itemSize.height * 0.5) / self.flowLayout.itemSize.height)
+            
+            if let tempLayout = self.flowLayout {
+                if tempLayout.scrollDirection == .horizontal {
+                    index = Int((self.mainView.contentOffset.x + tempLayout.itemSize.width * 0.5) / tempLayout.itemSize.width)
+                }else {
+                    index = Int((self.mainView.contentOffset.y + tempLayout.itemSize.height * 0.5) / tempLayout.itemSize.height)
+                }
             }
             
             return index
@@ -327,13 +324,15 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
     private var timer: Timer?
 
     // MARK: - Init
-    public override init(frame: CGRect) {
+    public init(frame: CGRect, flowLayout: UICollectionViewFlowLayout? = nil) {
         super.init(frame: frame)
+        self.flowLayout = flowLayout
         setupMainViews()
     }
     
-    public init(frame: CGRect, placeholderImage: UIImage) {
+    public init(frame: CGRect, placeholderImage: UIImage, flowLayout: UICollectionViewFlowLayout? = nil) {
         super.init(frame: frame)
+        self.flowLayout = flowLayout
         setupMainViews()
     }
     
@@ -361,7 +360,7 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.flowLayout.itemSize = self.frame.size
+        self.flowLayout?.itemSize = self.frame.size
         
         self.mainView.frame = self.bounds
         
@@ -405,6 +404,14 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
     
     // MARK: - UI
     private func setupMainViews() {
+        self.flowLayout = flowLayout ?? {
+            let temp = UICollectionViewFlowLayout()
+            temp.minimumLineSpacing = 0
+            temp.scrollDirection = .horizontal
+            
+            return temp
+        }()
+        
         self.backgroundColor = .lightGray
         self.addSubview(mainView)
     }
@@ -515,6 +522,13 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
                 }
             }
         }
+    }
+    
+    /// 刷新数据
+    ///
+    /// - Returns Void
+    public func reloadData() {
+        self.mainView.reloadData()
     }
     
     // MARK: - Private
