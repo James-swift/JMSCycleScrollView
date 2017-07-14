@@ -40,7 +40,19 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
     
     public var cstCellForItemBlk: ((_ collectionView: UICollectionView, _ cell: UICollectionViewCell, _ forIndex: Int) -> ())?
     
-    public var cstCellNumberOfItems: ((_ collectionView: UICollectionView, _ inSection: Int) -> Int)?
+    public var cstCellNumberOfItems: ((_ collectionView: UICollectionView) -> Int)? {
+        didSet {
+            let tempRow = self.cstCellNumberOfItems?(self.mainView) ?? 0
+            
+            var tempArray: Array<String> = []
+            
+            for _ in 0..<tempRow {
+                tempArray.append("")
+            }
+            
+            self.imageURLStringsGroup = tempArray
+        }
+    }
     
     // MARK: - 数据源
     /// 网络图片url string数
@@ -340,7 +352,6 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setupMainViews()
     }
     
     public override func awakeFromNib() {
@@ -555,10 +566,6 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
     
     // MARK: - UICollectionViewDataSource
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if self.cstCellNumberOfItems != nil {
-            return self.cstCellNumberOfItems!(collectionView, section)
-        }
-        
         return self.totalItemsCount
     }
     

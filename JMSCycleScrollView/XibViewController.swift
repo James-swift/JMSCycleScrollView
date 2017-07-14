@@ -51,6 +51,10 @@ class XibViewController: UIViewController {
                 cstCell.imageView.kf.setImage(with: URL.init(string: self.networkImageNameArray[forIndex]))
             }
         }
+        
+        cycleScrollView.cstCellNumberOfItems = { (collectionView) in
+            return self.localImageNameArray.count
+        }
     }
 
 }

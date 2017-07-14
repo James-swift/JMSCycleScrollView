@@ -68,7 +68,6 @@ public class JMSCycleCollectionViewCell: UICollectionViewCell {
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.setupViews()
     }
 
     // MARK: - UI

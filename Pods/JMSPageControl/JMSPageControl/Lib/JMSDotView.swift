@@ -22,7 +22,6 @@ public class JMSDotView: JMSAbstractDotView {
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.setupViews()
     }
     
     override public func changeActivityState(active: Bool) {
