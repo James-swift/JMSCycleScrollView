@@ -40,6 +40,8 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
     
     public var cstCellForItemBlk: ((_ collectionView: UICollectionView, _ cell: UICollectionViewCell, _ forIndex: Int) -> ())?
     
+    public var cstCellNumberOfItems: ((_ collectionView: UICollectionView, _ inSection: Int) -> Int)?
+    
     // MARK: - 数据源
     /// 网络图片url string数
     public var imageURLStringsGroup: Array<Any> = [] {
@@ -524,19 +526,10 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
         }
     }
     
-    /// 刷新数据
+    /// 滚动到指定页面
     ///
     /// - Returns Void
-    public func reloadData() {
-        self.mainView.reloadData()
-    }
-    
-    // MARK: - Private
-    private func pageControlIndex(_ currentCellIndex: Int) -> Int {
-        return currentCellIndex % self.imagePathsGroup.count
-    }
-
-    private func scrollToIndex(_ targetIndex: Int) {
+    public func scrollToIndex(_ targetIndex: Int) {
         if targetIndex >= self.totalItemsCount {
             if self.isInfiniteLoop {
                 let tempTargetIndex = Int(CGFloat(self.totalItemsCount) * 0.5)
@@ -548,8 +541,24 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
         self.mainView.scrollToItem(at: IndexPath.init(row: targetIndex, section: 0), at: self.scrollPositon, animated: true)
     }
     
+    /// 刷新数据
+    ///
+    /// - Returns Void
+    public func reloadData() {
+        self.mainView.reloadData()
+    }
+    
+    // MARK: - Private
+    private func pageControlIndex(_ currentCellIndex: Int) -> Int {
+        return currentCellIndex % self.imagePathsGroup.count
+    }
+    
     // MARK: - UICollectionViewDataSource
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if self.cstCellNumberOfItems != nil {
+            return self.cstCellNumberOfItems!(collectionView, section)
+        }
+        
         return self.totalItemsCount
     }
     
