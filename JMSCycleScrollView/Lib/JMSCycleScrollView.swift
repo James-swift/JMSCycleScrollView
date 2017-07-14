@@ -38,24 +38,17 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
         }
     }
     
-    public var cstCellForItemBlk: ((_ collectionView: UICollectionView, _ cell: UICollectionViewCell, _ forIndex: Int) -> ())?
+    public var cstCellForItemBlk: ((_ collectionView: UICollectionView, _ cell: UICollectionViewCell, _ itemData: Any, _ forIndex: Int) -> ())?
     
-    public var cstCellNumberOfItems: ((_ collectionView: UICollectionView) -> Int)? {
+    /// 自定义Cell传入的数据数组
+    public var cstDataGroup: Array<Any> = [] {
         didSet {
-            let tempRow = self.cstCellNumberOfItems?(self.mainView) ?? 0
-            
-            var tempArray: Array<String> = []
-            
-            for _ in 0..<tempRow {
-                tempArray.append("")
-            }
-            
-            self.imageURLStringsGroup = tempArray
+            self.imagePathsGroup = cstDataGroup
         }
     }
     
     // MARK: - 数据源
-    /// 网络图片url string数
+    /// 网络图片url string数组
     public var imageURLStringsGroup: Array<Any> = [] {
         didSet {
             var tempArray: Array<String> = []
@@ -94,7 +87,7 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
         }
     }
     
-    /// 本地图片数组
+    /// 本地图片数组(图片名称或者UIImage对象)
     public var localImageNamesGroup: Array<Any> = [] {
         didSet {
             self.imagePathsGroup = localImageNamesGroup
@@ -574,7 +567,7 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
         let itemIndex = self.pageControlIndex(indexPath.item)
         
         if let cstBlk = self.cstCellForItemBlk {
-            cstBlk(collectionView, cell, itemIndex)
+            cstBlk(collectionView, cell, self.imagePathsGroup[itemIndex], itemIndex)
             return cell
         }
         

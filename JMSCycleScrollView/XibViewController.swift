@@ -37,7 +37,7 @@ class XibViewController: UIViewController {
     
     // MARK: - UI
     private func setupCstCycleScrollView() {
-        cycleScrollView.localImageNamesGroup = self.localImageNameArray
+        cycleScrollView.cstDataGroup = self.localImageNameArray
         cycleScrollView.pageDotImage = UIImage.init(named: "dotInactive")
         cycleScrollView.currentPageDotImage = UIImage.init(named: "dotActive")
         cycleScrollView.pageControlAliment = .right
@@ -46,14 +46,10 @@ class XibViewController: UIViewController {
             return CstCollectionViewCell.self
         }
         
-        cycleScrollView.cstCellForItemBlk = { (collectionView, cell, forIndex) in
+        cycleScrollView.cstCellForItemBlk = { (collectionView, cell, itemData, forIndex) in
             if let cstCell = cell as? CstCollectionViewCell {
                 cstCell.imageView.kf.setImage(with: URL.init(string: self.networkImageNameArray[forIndex]))
             }
-        }
-        
-        cycleScrollView.cstCellNumberOfItems = { (collectionView) in
-            return self.localImageNameArray.count
         }
     }
 
