@@ -294,12 +294,12 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
             
             if imagePathsGroup.count > 1 {
                 self.mainView.isScrollEnabled = true
-                let temp = self.isAutoScroll
-                self.isAutoScroll = temp
             }else {
                 self.mainView.isScrollEnabled = false
-                self.isAutoScroll = false
             }
+            
+            let temp = self.isAutoScroll
+            self.isAutoScroll = temp
             
             self.setupPageControl()
             self.mainView.reloadData()
