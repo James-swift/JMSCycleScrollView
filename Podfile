@@ -3,6 +3,6 @@ inhibit_all_warnings!
 use_frameworks!
 
 target 'JMSCycleScrollView' do
-    pod 'Kingfisher'
+    pod 'Kingfisher', '~> 4.2.0'
     pod 'JMSPageControl'
 end
