@@ -324,7 +324,7 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
                 }
             }
             
-            return index
+            return max(0, index)
         }
     }
     
@@ -536,7 +536,7 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
     public func scrollToIndex(_ targetIndex: Int) {
         if targetIndex >= self.totalItemsCount {
             if self.isInfiniteLoop {
-                let tempTargetIndex = Int(CGFloat(self.totalItemsCount) * 0.5)
+                let tempTargetIndex = Int(CGFloat(self.totalItemsCount) * 0.5) + self.pageControlIndex(targetIndex)
                 self.mainView.scrollToItem(at: IndexPath.init(row: tempTargetIndex, section: 0), at: self.scrollPositon, animated: false)
             }
             return
@@ -553,6 +553,18 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
     }
     
     // MARK: - Private
+    private func handleDragging() {
+        if self.mainView.isDragging {
+            if (self.currentIndex + 1) >= self.totalItemsCount {
+                if self.isInfiniteLoop {
+                    let tempTargetIndex = Int(CGFloat(self.totalItemsCount) * 0.5) + self.pageControlIndex(self.currentIndex)
+                    self.mainView.scrollToItem(at: IndexPath.init(row: tempTargetIndex, section: 0), at: self.scrollPositon, animated: false)
+                }
+                return
+            }
+        }
+    }
+
     private func pageControlIndex(_ currentCellIndex: Int) -> Int {
         return currentCellIndex % self.imagePathsGroup.count
     }
@@ -639,6 +651,8 @@ public class JMSCycleScrollView: UIView, UICollectionViewDelegate, UICollectionV
         }else if let tempPageControl = self.pageControl as? UIPageControl {
             tempPageControl.currentPage = indexOnPageControl
         }
+        
+        self.handleDragging()
     }
     
     public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
